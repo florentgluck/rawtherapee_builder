@@ -18,6 +18,12 @@ To inspect RawTherapee's git repository and source code, run:
 make inspect
 ```
 
+To delete the generated archive, run:
+
+```
+make clean
+```
+
 # Deploying on the host
 
 To deploy the generated `rawtherapee.tar.gz` file onto the host system, simply decompress and de-archive it.
