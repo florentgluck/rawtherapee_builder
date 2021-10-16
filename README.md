@@ -30,7 +30,7 @@ To deploy the generated `rawtherapee.tar.gz` file onto the host system, simply d
 For instance, to extract it to `~/rawtherapee`, type:
 
 ```
-tar fxz -C $HOME rawtherapee.tar.gz
+tar fxz rawtherapee.tar.gz -C $HOME
 ```
 
 Please note that you will probably need to install the libiptcdata0 library. To do so, simply run:
