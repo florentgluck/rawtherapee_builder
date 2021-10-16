@@ -1,14 +1,16 @@
-image=rawtherapee_builder
-archive=rawtherapee.tar.gz
+IMAGE=rawtherapee_builder
+ARCHIVE=rawtherapee.tar.gz
+UID=$(shell id -u)
+GID=$(shell id -g)
 
-$(archive): build
-	docker run --rm --mount type=bind,src=$(PWD),dst=/shared $(image)
+$(ARCHIVE): build
+	docker run --user $(UID):$(GID) --rm --mount type=bind,src=$(PWD),dst=/shared $(IMAGE)
 
 inspect: build
-	docker run -it --rm --mount type=bind,src=$(PWD),dst=/shared $(image) bash
+	docker run --user $(UID):$(GID) -it --rm --mount type=bind,src=$(PWD),dst=/shared $(IMAGE) bash
 
 build:
-	docker build . -t $(image)
+	docker build . -t $(IMAGE)
 
 clean:
-	-rm -f $(archive)
+	-rm -f $(ARCHIVE)

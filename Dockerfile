@@ -13,4 +13,4 @@ RUN git clone https://github.com/Beep6581/RawTherapee.git rawtherapee.git && cd 
 RUN tar fcz /home/rawtherapee.tar.gz -C $INSTALL_DIR rawtherapee
 RUN mkdir /shared
 
-CMD install -g 1000 -o 1000 -m 664 /home/rawtherapee.tar.gz /shared
+CMD install -m 664 /home/rawtherapee.tar.gz /shared
