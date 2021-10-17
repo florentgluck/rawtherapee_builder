@@ -11,11 +11,11 @@ Simply run `make` to display the description of the supported targets:
 ```
 Supported targets:
 	build		builds the container image
-	archive		builds the RawTherapee archive rawtherapee.tar.gz in the current directory
+	archive		builds the RawTherapee ARCHIVE in the current directory
 	inspect		runs a shell in the build container and inspects the source contents
-	install		installs rawtherapee.tar.gz to /home/gluckf/.local
-	clean		delete rawtherapee.tar.gz
-	mrproper	delete rawtherapee.tar.gz and delete the container image
+	install		installs ARCHIVE to INSTALL_DIR
+	clean		delete ARCHIVE
+	mrproper	delete ARCHIVE and delete the container image
 
 Where:
 	ARCHIVE is the env. variable that specifies the name of the archive
