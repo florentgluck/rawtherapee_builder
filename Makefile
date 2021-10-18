@@ -1,5 +1,5 @@
 # Change these 2 variables to your liking
-ARCHIVE=rawtherapee.tar.gz
+TARBALL=rawtherapee.tar.gz
 INSTALL_DIR=$(HOME)/.local
 
 IMAGE=rawtherapee_builder
@@ -8,33 +8,45 @@ GID=$(shell id -g)
 
 help:
 	@echo "Supported targets:"
-	@echo "\tbuild\t\tbuilds the container image"
-	@echo "\tarchive\t\tbuilds the RawTherapee ARCHIVE in the current directory"
-	@echo "\tinspect\t\truns a shell in the build container and inspects the source contents"
-	@echo "\tinstall\t\tinstalls ARCHIVE to INSTALL_DIR"
-	@echo "\tclean\t\tdelete ARCHIVE"
-	@echo "\tmrproper\tdelete ARCHIVE and delete the container image"
+	@echo "\tbuild\t\tbuilds an image with RawTherapee's source code and a"
+	@echo  "\t\t\ttarball of the installation files"
+	@echo "\ttarball\t\tcopies the tarball of the installation files to the"
+	@echo "\t\t\tcurrent directory"
+	@echo "\tinspect\t\truns a shell in the container to inspects RawTherapee's"
+	@echo "\t\t\tsources and tarball"
+	@echo "\tinstall\t\tinstalls TARBALL to INSTALL_DIR on the host"
+	@echo "\tclean\t\tdelete TARBALL"
+	@echo "\tmrproper\tdelete TARBALL and delete the container image"
 	@echo "\nWhere:"
-	@echo "\tARCHIVE is the env. variable that specifies the name of the archive"
-	@echo "\tINSTALL_DIR is the env. variable that specifies the installation directory"
-	@echo "\nUsage example:"
-	@echo "The command below builds RawTherapee as the rt.tgz archive, then it installs it into ~/.local:"
-	@echo "make ARCHIVE=rt.tgz INSTALL_DIR=~/.local install"
+	@echo "\tTARBALL is the env. variable that specifies the name of the tarball"
+	@echo "\t\t\tarchive"
+	@echo "\tCurrent TARBALL value: $(TARBALL)"
+	@echo "\tINSTALL_DIR is the env. variable that specifies where RawTherapee"
+	@echo "\t\t\tmust be installed"
+	@echo "\tCurrent INSTALL_DIR value: $(INSTALL_DIR)"
+	@echo "\nUsage examples:"
+	@echo "- Creates rawtherapee.tar.gz (default name) from RawTherapee's installation"
+	@echo "  files and installs it into ~/.local (default installation dir.) on the host:"
+	@echo "  \$$ make install"
+	@echo "- Creates rt.tgz from RawTherapee's installation files and installs it into"
+	@echo "  /tmp on the host:"
+	@echo "  \$$ make TARBALL=rt.tgz INSTALL_DIR=/tmp install"
 
 build:
-	docker build . -t $(IMAGE)
+	docker build --build-arg UID=$(UID) --build-arg GID=$(GID) --build-arg TARBALL=$(TARBALL) --build-arg INSTALL_DIR=$(INSTALL_DIR) . -t $(IMAGE)
 
-archive: build
-	docker run -e ARCHIVE=$(ARCHIVE) --user $(UID):$(GID) --rm --mount type=bind,src=$(PWD),dst=/shared $(IMAGE)
+tarball: build
+	docker run -e TARBALL=$(TARBALL) --user $(UID):$(GID) --rm --mount type=bind,src=$(PWD),dst=/shared $(IMAGE)
 
 inspect: build
-	docker run -e ARCHIVE=$(ARCHIVE) --user $(UID):$(GID) -it --rm --mount type=bind,src=$(PWD),dst=/shared $(IMAGE) bash
+	docker run --user $(UID):$(GID) -it --rm --mount type=bind,src=$(PWD),dst=/shared $(IMAGE) bash
 
-install: $(ARCHIVE)
-	tar fxz $< -C $(INSTALL_DIR)
+install: tarball
+	-mkdir -p $(INSTALL_DIR)
+	tar fxz $(TARBALL) -C $(INSTALL_DIR)
 
 clean:
-	-rm -f $(ARCHIVE)
+	-rm -f $(TARBALL)
 
 mrproper: clean
 	-docker rmi $(IMAGE)
