@@ -10,20 +10,24 @@ Simply run `make` to display the description of the supported targets:
 
 ```
 Supported targets:
-	build		builds the container image
-	archive		builds the RawTherapee ARCHIVE in the current directory
-	inspect		runs a shell in the build container and inspects the source contents
-	install		installs ARCHIVE to INSTALL_DIR
-	clean		delete ARCHIVE
-	mrproper	delete ARCHIVE and delete the container image
+	build		builds an image with RawTherapee's source code and a tarball of the installation files
+	tarball		copies the tarball of the installation files to the current directory
+	inspect		runs a shell in the container to inspects RawTherapee's sources and tarball
+	install		installs TARBALL to INSTALL_DIR on the host
+	clean		delete TARBALL
+	mrproper	delete TARBALL and delete the container image
 
 Where:
-	ARCHIVE is the env. variable that specifies the name of the archive
-	INSTALL_DIR is the env. variable that specifies the installation directory
+	TARBALL is the env. variable that specifies the name of the tarball archive
+	Current TARBALL value: rawtherapee.tar.gz
+	INSTALL_DIR is the env. variable that specifies where RawTherapee must be installed
+	Current INSTALL_DIR value: ~/.local
 
-Usage example:
-The command below builds RawTherapee as the rt.tgz archive, then it installs it into ~/.local:
-make ARCHIVE=rt.tgz INSTALL_DIR=~/.local install
+Usage examples:
+- Creates rawtherapee.tar.gz (default name) from RawTherapee's installation files and installs it into ~/.local (default installation dir.) on the host:
+  $ make install
+- Creates rt.tgz from RawTherapee's installation files and installs it into /tmp on the host:
+  $ make TARBALL=rt.tgz INSTALL_DIR=/tmp install
 ```
 
 # Remark
