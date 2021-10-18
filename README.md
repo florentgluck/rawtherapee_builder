@@ -32,8 +32,8 @@ Usage examples:
 
 # Remark
 
-RawTherapee requires the `libiptcdata0` library. To install it, simply run:
+RawTherapee requires the `libiptcdata0` and `liblensfun` libraries on the host. To install them, simply run:
 
 ```
-sudo apt install -y libiptcdata0 
+sudo apt install -y libiptcdata0 liblensfun1
 ```
